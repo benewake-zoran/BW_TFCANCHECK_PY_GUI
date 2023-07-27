@@ -201,6 +201,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承QMainWindow类和Ui_Mai
             print(type(e))
             print(e)
 
+    # 帮助菜单栏下打开帮助文档
+    def trigger_actHelp(self):
+        try:
+            # current_path = os.path.abspath(os.path.dirname(__file__))  # 获取当前路径
+            # html_path = os.path.join(current_path, 'help', 'help.html')  # 拼接帮助文件路径
+            # os.startfile(html_path)
+            os.startfile('help\help.html')
+        except Exception as e:
+            print(type(e))
+            print(e)
+
     # 菜单栏打开的信号和槽函数
     def trigger_actOpen(self):
         try:
@@ -358,6 +369,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承QMainWindow类和Ui_Mai
             self.labelReturnlist[self.index].setVisible(True)
             self.timer.stop()
 
+    # 点击一键执行按钮信号所绑定的槽函数
     def checkAll(self):
         try:
             if self.pushButton_start.text() == '启动' or self.pushButton_start.text() == 'start':
@@ -371,23 +383,23 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):  # 继承QMainWindow类和Ui_Mai
                 elif self.ENFlag is True:
                     QMessageBox.warning(None, 'Error', 'CAN send ID may not be entered!')
             else:
-                self.clearlist()
+                self.clearlist()  # 清空接收数据
                 NGflag = False
                 self.Skipflag = True
-                self.clearLabel()
+                self.clearLabel()  # 清空标签显示内容
                 time.sleep(1)
                 func.clearBuffer_CAN(self)
                 for button in self.buttonlist:
                     QApplication.processEvents()
                     time.sleep(1)
                     button.click()
-                    if self.widgetslist[self.index].text() == '':
+                    if self.widgetslist[self.index].text() == '':  # 若接收失败等待3s后尝试再次检验以增加稳定性
                         time.sleep(3)
                         button.click()
-                        if self.widgetslist[self.index].text() == '':
+                        if self.widgetslist[self.index].text() == '':  # 若接收失败等待3s后尝试再次检验以增加稳定性
                             time.sleep(3)
                             button.click()
-                            if self.widgetslist[self.index].text() == '':
+                            if self.widgetslist[self.index].text() == '':  # 若仍无接收则退出循环不再检验
                                 break
                     # QApplication.processEvents()  # 实时更新GUI
                     # time.sleep(0.5)

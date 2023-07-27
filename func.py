@@ -5,13 +5,14 @@ import math
 import CAN
 
 
-CMD_FRAME_HEADER = 0x5A
+CMD_FRAME_HEADER = 0x5A  # 接收指令的帧头5A
 DIS_DIFF = 20  # 允许测距误差范围
 FPS_DIFF = 20  # 允许帧率误差范围
 SingleRangeCmd = (0x5A, 0x04, 0x04, 0x62)  # 单次测距指令
 candll = ctypes.windll.LoadLibrary('./ControlCAN.dll')
 
 
+# 清空指定CAN通道的缓冲区
 def clearBuffer_CAN(self):
     canclear = candll.VCI_ClearBuffer(CAN.nDeviceType, self.nDeviceInd, self.nCANInd)
     if canclear != 1:
@@ -21,6 +22,7 @@ def clearBuffer_CAN(self):
     time.sleep(0.5)
 
 
+# 发送JSON文件里的指令
 def sendCmd_CAN(self):
     str_cmd = self.data[self.index]['cmd']  # JSON 文件里 cmd 为字符串类型
     dec_cmd = [int(x, 16) for x in str_cmd.split()]  # 将字符串按空格分割成字符串列表，并将每个字符串转换为十六进制数值
@@ -81,6 +83,7 @@ def sendCmd_CAN(self):
     time.sleep(0.1)
 
 
+# 接收回显指令
 def recvData_CAN(self):
     self.rx = ''
     # 接收的帧结构体VCI_CAN_OBJ数组
@@ -130,7 +133,17 @@ def recvData_CAN(self):
                         rx += tuple(rx_vci_can_obj.STRUCT_ARRAY[i + 1].Data)
                         i = i + 1
                         print('rx:', rx)
-                    rx_tuple = rx[:rxlen]
+                    if self.data[self.index]['cmd'] == '5A 05 56 00 B5':  # 若TF03系列发送检查序列号指令，接收指令需进行处理
+                        print('send TF03 SN')
+                        rx_list = []
+                        for i in range(0, len(rx), 8):  # 每8个字节进行分割，取前6个字节
+                            rx_list.append(rx[i:i + 6])
+                        print('rx_list', rx_list)
+                        rx_tuple = ()
+                        for j in rx_list:  # 拼接指令
+                            rx_tuple += j
+                    else:
+                        rx_tuple = rx[:rxlen]
                     rxhex_str = ' '.join([format(i, '02X') for i in rx_tuple])
                     self.rx = rxhex_str  # self.rx 为接收指令（字符串类型）
                     print('rx_tuple:', rx_tuple)
@@ -143,6 +156,7 @@ def recvData_CAN(self):
     print('--------------------------------')
 
 
+# 根据配置标签名称对rx进行处理和回显正误判断
 def recvAnalysis_CAN(self):
     if self.data[self.index]['name'] == '序列号' or self.data[self.index]['name'] == 'SerialNumber':
         if self.rx != '' and self.rx.split()[2] == '12':  # TF02-i、TFmini-i 序列号检查
@@ -182,6 +196,7 @@ def recvAnalysis_CAN(self):
         print('--------------------------------')
 
 
+# 判断期望值和检查值是否相同
 def recvJudge_CAN(self):
     if self.data[self.index]['widget'] == 'QLabel' or self.data[self.index]['widget'] == 'QLineEdit':
         if self.data[self.index]['std'] == '' and self.widgetslist[self.index].text() != '':
@@ -223,6 +238,7 @@ def recvJudge_CAN(self):
             self.labelReturnlist[self.index].setStyleSheet('color: red')
 
 
+# 检查测距
 def checkDis_CAN(self):
     # clearBuffer_CAN(self)
     rx_vci_can_obj = CAN.VCI_CAN_OBJ_ARRAY(2500)
@@ -314,6 +330,7 @@ def checkDis_CAN(self):
     print('--------------------------------')
 
 
+# 检查其他标签
 def checkOther_CAN(self):
     # clearBuffer_CAN(self)
     rx_vci_can_obj = CAN.VCI_CAN_OBJ_ARRAY(2500)
@@ -395,6 +412,7 @@ def checkOther_CAN(self):
     print('--------------------------------')
 
 
+# 检查输出帧率
 def checkFrame_CAN(self):
     timestamp_list = []
     Len = 2500

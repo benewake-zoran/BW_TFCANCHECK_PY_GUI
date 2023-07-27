@@ -1,0 +1,15 @@
+[
+    {"id": 0, "name": "SerialNumber", "widget": "QLabel", "button": "Check", "std": "", "cmd": "5A 05 56 00 B5", "remoteflag": "0", "externflag": "0"},
+    {"id": 1, "name": "FirmwareVer", "widget": "QLabel", "button": "Check", "std": "2.2.6", "cmd": "5A 04 01 5F", "remoteflag": "0", "externflag": "0"},
+    {"id": 2, "name": "FrameRate", "widget": "QLabel", "button": "Check", "std": "100", "cmd": "", "remoteflag": "0", "externflag": "0"},
+    {"id": 3, "name": "RangingResult", "widget": "QLabel", "button": "Check", "std": "", "cmd": "", "remoteflag": "0", "externflag": "0"},
+    {"id": 4, "name": "Baud 1000k", "widget": "QLabel", "button": "Set", "std": "5A 05 52 00 B1", "cmd": "5A 08 52 40 42 0F 00 45", "remoteflag": "0", "externflag": "0"},
+    {"id": 5, "name": "CAN rx ID 0x03", "widget": "QLabel", "button": "Set", "std": "5A 05 50 00 AF", "cmd": "5A 08 50 03 00 00 00 B5", "remoteflag": "0", "externflag": "0"},
+    {"id": 6, "name": "CAN tx ID 0x03", "widget": "QLabel", "button": "Set", "std": "5A 05 51 00 B0", "cmd": "5A 08 51 03 00 00 00 B6", "remoteflag": "0", "externflag": "0"},
+    {"id": 7, "name": "Set FrameRate 100Hz", "widget": "QLabel", "button": "Check", "std": "5A 06 03 64 00 C7", "cmd": "5A 06 03 64 00 C7", "remoteflag": "0", "externflag": "0"},
+    {"id": 8, "name": "Save", "widget": "QLabel", "button": "Check", "std": "", "cmd": "5A 04 11 6F", "remoteflag": "0", "externflag": "0"},
+    {"id": 9, "name": "SystemReset", "widget": "QLabel", "button": "Check", "std": "5A 05 02 00 61", "cmd": "5A 04 02 60", "remoteflag": "0", "externflag": "0"},
+    {"id": 10, "name": "Open Output", "widget": "QLabel", "button": "Check", "std": "5A 05 07 01 67", "cmd": "5A 05 07 01 67", "remoteflag": "0", "externflag": "0"},
+    {"id": 11, "name": "Close Output", "widget": "QLabel", "button": "Check", "std": "5A 05 07 00 66", "cmd": "5A 05 07 00 66", "remoteflag": "0", "externflag": "0"}
+
+]
