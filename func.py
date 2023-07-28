@@ -219,6 +219,7 @@ def recvJudge_CAN(self):
             else:
                 self.labelReturnlist[self.index].setText('NG')
                 self.labelReturnlist[self.index].setStyleSheet('color: red')
+                self.widgetslist[self.index].setText('')
                 print('Framerate rx is Empty')
         elif self.data[self.index]['std'] == self.widgetslist[self.index].text() and self.widgetslist[self.index].text() != '':
             self.labelReturnlist[self.index].setText('OK')
